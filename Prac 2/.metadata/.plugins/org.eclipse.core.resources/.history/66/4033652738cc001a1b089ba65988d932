@@ -1,0 +1,88 @@
+import org.jcsp.lang.*;
+import java.util.*;
+
+/** Consumer class: reads one int from input channel, displays it, then
+  * terminates.
+  */
+public class Buffer implements CSProcess
+  {  private ChannelOutputInt consumer1;
+     private ChannelOutputInt consumer2;
+  	 private AltingChannelInputInt producer1;
+  	 private AltingChannelInputInt producer2;
+  	 private AltingChannelInputInt checkItem1;
+  	 private AltingChannelInputInt checkItem2;
+  	 private Queue<Integer> production;
+	
+   public Buffer(AltingChannelInputInt checkItem1, AltingChannelInputInt checkItem2, AltingChannelInputInt producer1, AltingChannelInputInt producer2,
+		   ChannelOutputInt consumer1, ChannelOutputInt consumer2) {
+	   this.consumer1 = consumer1;
+	   this.producer1 = producer1;
+	   this.checkItem1 = checkItem1;
+	   this.consumer2 = consumer2;
+	   this.producer2 = producer2;
+	   this.checkItem2 = checkItem2;
+	   production = new LinkedList<>();
+   }
+
+public void run ()
+   {	  
+	 final Guard[] storage = {producer1, producer2, checkItem1, checkItem2};
+	 final Alternative alt = new Alternative (storage);
+	 final int Produce1 = 0;
+	 final int AskFor_item1 = 2;
+	 final int Produce2 = 1;
+	 final int AskFor_item2 = 3;
+	 int terminate = 0;
+	 int stop1 = 0;
+	 int stop2 = 0;
+	 int stop3 = 0;
+	 int stop4 = 0;
+	//for(int start = 0; start<10; start++)
+	while(true)
+	 {
+		 switch(alt.select()) {
+		 case Produce1:
+			 if (production.size() < 10 && stop1 < 100) {
+				 int item =  producer1.read();
+				 production.add(item);
+				 System.out.println("Producer 1: " + item);
+				 terminate++;
+				 stop1++;
+			 }
+		 break;
+		 case AskFor_item1:
+			 	 int ask = checkItem1.read();			 	
+				 if (production.peek() == null) {
+					 break;
+				 }
+				 else
+				 {
+					 consumer2.write(production.poll());
+					 terminate++;
+					 break;
+				}
+		 case Produce2:
+			 if (production.size() < 10 && stop2 < 100) {
+				 int item =  producer2.read();
+				 production.add(item);
+				 System.out.println("Producer 2: " + item);
+			 }
+		 break;
+		 case AskFor_item2:
+			 	 ask = checkItem2.read();
+				 if (production.peek() == null) {
+					 break;
+				 }
+				 else
+				 {
+					 consumer1.write(production.poll());
+					 terminate++;
+					 break;
+				}
+		 }
+		 if(terminate == 400)
+			 break;
+	 }
+   } // run
+
+  } // class Buffer

@@ -1,0 +1,33 @@
+import org.jcsp.lang.*;
+import java.util.*;
+
+/** Consumer class: reads one int from input channel, displays it, then
+  * terminates.
+  */
+public class Buffer implements CSProcess
+  {  private ChannelOutputInt consumer;
+  	 private AltingChannelInputInt producer;
+  	 private Queue<Integer> production = new LinkedList<>();
+	
+   public Buffer( AltingChannelInputInt producer, ChannelOutputInt consumer) {
+	   this.consumer = consumer;
+	   this.producer = producer;
+   }
+   
+   public void run ()
+   {	  
+	 final Guard[] storage = {producer};
+	 final Alternative alt = new Alternative (storage);
+	 while(true) {
+		 switch(alt.select()) {
+		 case 0:
+			 if (production.size() <= 100) {
+				 production.add(producer.read());
+			 }
+		 }
+	     int item = producer.read();
+	     consumer.write(item);
+	 }
+   } // run
+
+  } // class Buffer

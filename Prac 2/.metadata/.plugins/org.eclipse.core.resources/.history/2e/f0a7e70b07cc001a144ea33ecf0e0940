@@ -1,0 +1,26 @@
+import org.jcsp.lang.*;
+
+/** Producer class: produces one random integer and sends on
+  * output channel, then terminates.
+  */
+public class Producer implements CSProcess
+  { private ChannelOutputInt channel1;
+  	private ChannelOutputInt channel2;
+
+    public Producer (final ChannelOutputInt out1, final ChannelOutputInt out2)
+      { 
+    	channel1 = out1;
+        channel2 = out2;
+      } // constructor
+
+    public void run ()
+      { 
+    	for(int count = 0; count<=100; count++) {
+    		int item1 = (int)(Math.random()*100)+1;
+            channel1.write(item1);
+            item2 = (int)(Math.random()*100)+100;
+            channel2.write(item2);
+    	}
+      } // run
+
+  } // class Producer

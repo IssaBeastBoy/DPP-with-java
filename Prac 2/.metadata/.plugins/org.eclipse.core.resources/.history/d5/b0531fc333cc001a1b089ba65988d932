@@ -1,0 +1,38 @@
+import org.jcsp.lang.*;
+
+/** Main program class for Producer/Consumer example.
+  * Sets up channel, creates one of each process then
+  * executes them in parallel, using JCSP.
+  */
+public final class PCMain
+  {
+    public static void main (String[] args)
+      { new PCMain();
+      } // main
+
+    public PCMain ()
+      { // Create channel object
+        final One2OneChannelInt Con_channel1 = Channel.one2oneInt();
+        final One2OneChannelInt Con_channel2 = Channel.one2oneInt();
+        final One2OneChannelInt Pro_channel1 = Channel.one2oneInt();
+        final One2OneChannelInt Pro_channel2 = Channel.one2oneInt();
+        final One2OneChannelInt Item_channel1 = Channel.one2oneInt();
+        final One2OneChannelInt Item_channel2 = Channel.one2oneInt();
+
+        // Create and run parallel construct with a list of processes
+        CSProcess[] procList = { new Buffer(Item_channel1.in(), Item_channel2.in(), Pro_channel1.in(), Pro_channel2.in(), Con_channel1.out(), Con_channel2.out()), new Producer(Pro_channel2.out(), FIX), new Producer(Pro_channel1.out(), FIX), new Consumer(Con_channel1.in(), Item_channel1.out()), new Consumer(Con_channel2.in(), Item_channel2.out()) }; // Processes
+        Parallel par = new Parallel(procList); // PAR construct
+        par.run(); // Execute processes in parallel
+      } // PCMain constructor
+
+  } // class PCMain
+
+/*e. The processes are in parallel therefore they generate race conditions   
+ * so checks are required to check whether the items are available for the consumers
+ *   to use in the buffer since the race conditions make it impossible to tell
+ *   which consumer will access the buffer first and whether the producers would
+ *   have add items into the buffer 
+ * 
+ */
+
+

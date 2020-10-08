@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/jcsp.jar"/>
+	<classpathentry kind="lib" path="lib/jcsp-1.1-rc4.jar"/>
+	<classpathentry kind="lib" path="lib/jcsp-core.jar"/>
+	<classpathentry kind="lib" path="lib/jcsp-demos-util.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

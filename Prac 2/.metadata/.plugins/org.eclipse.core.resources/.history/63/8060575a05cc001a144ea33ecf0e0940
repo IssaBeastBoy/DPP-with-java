@@ -1,0 +1,27 @@
+import org.jcsp.lang.*;
+
+/** Consumer class: reads one int from input channel, displays it, then
+  * terminates.
+  */
+public class Consumer implements CSProcess
+  { 
+	private AltingChannelInputInt channel1;
+	private AltingChannelInputInt channel2;
+  	private ChannelOutputInt item;  		
+
+    public Consumer (final AltingChannelInputInt in1, final AltingChannelInputInt in2, final ChannelOutputInt item)
+      { 
+    	channel1 = in1;
+    	channel2 = in2;
+        this.item = item;
+      } // constructor
+
+    public void run ()
+      { 
+	    	for(int start = 0; start<=100; start++) {
+	    		item.write(1);
+		        System.out.println("Consumer " + channel1.read());
+	    	}
+      } // run
+
+  } // class Consumer

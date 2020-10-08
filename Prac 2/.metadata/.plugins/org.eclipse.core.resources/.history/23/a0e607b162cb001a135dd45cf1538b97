@@ -1,0 +1,20 @@
+import org.jcsp.lang.*;
+import java.nio.*;
+
+/** Consumer class: reads one int from input channel, displays it, then
+  * terminates.
+  */
+public class Buffer implements CSProcess
+  {  private ChannelOutputInt channel;
+  	private AltingChannelInputInt channel;
+	
+   public Buffer() {
+	   buffer = IntBuffer.allocate(1);
+   }
+   
+   public void run ()
+   { int item = (int)(Math.random()*100)+1;
+     channel.write(item);
+   } // run
+
+  } // class Consumer
